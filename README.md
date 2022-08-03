@@ -10,4 +10,4 @@ El diseño y desarrollo de este servicio es guiado por la práctica TDD (Test-Dr
 Nunca escriba una nueva funcionalidad sin fallar la prueba.
 ```
 
-por lo que en base a la historias de usuario y criterios de aceptación definidos, se elaboraron pruebas de aceptación y pruebas unitarias a fin de verificar que las características del sistema se cumplen y que las partes que componen estas características funcionan como se espera. Entonces, los tests se han clasificado en dos carpetas: FeatureTesting y UnitTesting.
+por lo que en base a la historias de usuario y criterios de aceptación definidos, se elaboraron pruebas de aceptación y pruebas unitarias a fin de verificar que las características del sistema se cumplen y que las partes que componen estas características funcionan como se espera. Entonces, los tests se han clasificado en dos carpetas: AceptanceTesting y UnitTesting.
