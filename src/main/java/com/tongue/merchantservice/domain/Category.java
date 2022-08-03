@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.Instant;
 
 @Entity
@@ -13,19 +16,17 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Store {
+public class Category {
 
     @Id @GeneratedValue
     private Long id;
 
-    @OneToOne(optional = false)
-    private Merchant merchant;
+    @ManyToOne
+    private Store store;
 
-    @OneToOne(optional = false)
-    private Menu menu;
-
-    private Instant createdAt;
     private String name;
-    private String ruc;
+    private String description;
+    private Instant createdAt;
+    private String categoryImageUrl;
 
 }

@@ -6,26 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Store {
+public class MenuSection {
 
     @Id @GeneratedValue
     private Long id;
 
-    @OneToOne(optional = false)
-    private Merchant merchant;
+    @ManyToOne
+    private Category category;
 
-    @OneToOne(optional = false)
-    private Menu menu;
-
-    private Instant createdAt;
-    private String name;
-    private String ruc;
+    @OneToMany
+    private List<Product> products;
 
 }
