@@ -2,62 +2,12 @@
 
 Este servicio es una plataforma para administración de restaurantes. Por lo cual se admite el registro de negociantes que pueden registrar su negocio o su cadena de negocios con la temática de restaurante, donde a su vez podrá manipular el catálogo que ofrece a potenciales clientes. 
 
-## Features
+## Desarrollo
 
-- Developed using Spring Boot
-
-- Customers Managment
-
-- Merchants Managment
-
-- Shopping Cart
-
-- Checkout 
-
-- Integration with Tongue Customers App (Android App)
-
-- REST services
-
-- Google Authentication with JWT
-
-- Catalogue
-
-- Uber Eats based service
-
-- Modifiers and discounts for products
-
-- AMQP
-
-- Unit and Integration tests
-
-- Documentation
-
-
-## How it works
-
-This service provides a set of endpoints to be accessed from a web page or mobile client such as Tongue Customers App, some of the endpoints that you might call are GET : shopping/storevariants to obtain a JSON array of available stores, GET: /shipping/collections?storeVariantId can be used to get the list of available collections of products provided by the merchant of the store.
-
-For Merchants a web page built in React is going to be used to contact Shopping Service and publish their products.
-
-## Installation (Docker)
-
-Clone the repository:
+El diseño y desarrollo de este servicio es guiado por la práctica TDD (Test-Driven Development), es decir siguiendo la regla de:
 
 ```bash
-gh repo clone alexanderommel/ShoppingService-Tongue
+Nunca escriba una nueva funcionalidad sin fallar la prueba.
 ```
 
-Move to the root directory of the project, and run the following line:
-
-```bash
-docker-compose up 
-```
-
-If you modify the source code, use the following command to rebuild the .jar:
-
-```bash
-maven clean package
-```
-
-
- 
+por lo que en base a la historias de usuario y criterios de aceptación definidos, se elaboraron pruebas de aceptación y pruebas unitarias a fin de verificar que las características del sistema se cumplen y que las partes que componen estas características funcionan como se espera. Entonces, los tests se han clasificado en dos carpetas: FeatureTesting y UnitTesting.
