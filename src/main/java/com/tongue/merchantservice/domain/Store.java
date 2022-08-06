@@ -21,9 +21,6 @@ public class Store {
     @OneToOne(optional = false)
     private Merchant merchant;
 
-    @OneToOne(optional = false)
-    private Menu menu;
-
     private Instant createdAt;
     private String name;
     private String ruc;

@@ -1,12 +1,11 @@
 package com.tongue.merchantservice.acceptance;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tongue.merchantservice.auth.dto.MerchantRegistrationForm;
 import com.tongue.merchantservice.core.ApiResponse;
-import com.tongue.merchantservice.domain.Address;
 import com.tongue.merchantservice.domain.Merchant;
+import com.tongue.merchantservice.services.MerchantManagementService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,12 +19,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @Slf4j
 @AutoConfigureMockMvc
-public class RegisterMerchant {
+public class RegisterMerchantTest {
 
     @Autowired
     WebApplicationContext context;
@@ -33,6 +33,8 @@ public class RegisterMerchant {
     ObjectMapper mapper;
     @Autowired
     MockMvc mvc;
+    @Autowired
+    MerchantManagementService managementService;
 
     Gson gson = new Gson();
 
@@ -61,7 +63,7 @@ public class RegisterMerchant {
                 .ruc("1831092986003")
                 .build();
 
-        MvcResult result = this.mvc.perform(get("/auth/register")
+        MvcResult result = this.mvc.perform(post("/auth/register")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(registrationForm)))
                 .andReturn();
@@ -88,7 +90,6 @@ public class RegisterMerchant {
                 .ruc("1732416778003")
                 .build();
 
-        MerchantManagementService managementService;
         Merchant merchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         String repeatedRuc = registrationFormAlex.getRuc();
@@ -106,7 +107,7 @@ public class RegisterMerchant {
                 .ruc(repeatedRuc)
                 .build();
 
-        MvcResult result = this.mvc.perform(get("/auth/register")
+        MvcResult result = this.mvc.perform(post("/auth/register")
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(registrationFormDiana)))
                 .andReturn();

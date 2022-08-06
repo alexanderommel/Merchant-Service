@@ -21,9 +21,9 @@ public class StoreVariant {
     private Long id;
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Store store;
-    @ManyToOne(optional = false)
-    private StoreType type;
     @ManyToOne
+    private StoreType type;
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 
     private String name;
