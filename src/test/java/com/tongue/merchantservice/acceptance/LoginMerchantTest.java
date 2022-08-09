@@ -1,10 +1,14 @@
 package com.tongue.merchantservice.acceptance;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.tongue.merchantservice.auth.dto.AuthenticationCredentials;
+import com.tongue.merchantservice.auth.dto.GoogleAuthenticationCredentials;
 import com.tongue.merchantservice.auth.dto.MerchantRegistrationForm;
 import com.tongue.merchantservice.core.ApiResponse;
 import com.tongue.merchantservice.domain.Merchant;
+import com.tongue.merchantservice.services.MerchantAuthenticationService;
 import com.tongue.merchantservice.services.MerchantManagementService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -17,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,10 +44,13 @@ public class LoginMerchantTest {
 
     @Autowired
     MerchantManagementService managementService;
+    @Autowired
+    MerchantAuthenticationService authenticationService;
 
     Gson gson = new Gson();
 
     Merchant registeredMerchant;
+    MerchantRegistrationForm registrationFormAlex;
 
     @Before
     public void setUp(){
@@ -51,7 +59,7 @@ public class LoginMerchantTest {
                 .webAppContextSetup(context)
                 .build();
 
-        MerchantRegistrationForm registrationFormAlex = MerchantRegistrationForm
+        registrationFormAlex = MerchantRegistrationForm
                 .builder()
                 .name("Alexander")
                 .storeName("Kfc")
@@ -64,12 +72,13 @@ public class LoginMerchantTest {
                 .ruc("1762416778003")
                 .build();
 
-        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
-
     }
 
     @Test
+    @Transactional
     public void givenThatAMerchantAccountExistsWhenLoginCredentialsAreOkThenReturnValidJwt() throws Exception {
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         AuthenticationCredentials credentials = AuthenticationCredentials.builder()
                 .email(registeredMerchant.getEmail())
@@ -85,7 +94,6 @@ public class LoginMerchantTest {
         ApiResponse<String> apiResponse = gson.fromJson(json,ApiResponse.class);
         String jwt = apiResponse.getSuccess().getPayload();
 
-        MerchantAuthenticationService authenticationService;
         Merchant merchant = authenticationService.getMerchantFromJwt(jwt);
 
         assert merchant.getId()==registeredMerchant.getId();
@@ -93,7 +101,10 @@ public class LoginMerchantTest {
     }
 
     @Test
-    public void givenThatLoginPasswordIsWrongWhenAuthenticatingThenReturnWrongPasswordMessage() throws UnsupportedEncodingException {
+    @Transactional
+    public void givenThatLoginPasswordIsWrongWhenAuthenticatingThenReturnWrongPasswordMessage() throws Exception  {
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         String expected = "Wrong Password";
         AuthenticationCredentials credentials = AuthenticationCredentials.builder()
@@ -113,7 +124,10 @@ public class LoginMerchantTest {
     }
 
     @Test
-    public void givenThatLoginEmailDoesntExistWhenAuthenticatingThenReturnNoSuchMerchantMessage(){
+    @Transactional
+    public void givenThatLoginEmailDoesntExistWhenAuthenticatingThenReturnNoSuchMerchantMessage() throws Exception {
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         String expected = "No such Merchant with that email";
 
@@ -134,7 +148,10 @@ public class LoginMerchantTest {
     }
 
     @Test
-    public void givenThatGoogleJwtIsNotValidWhenAuthenticatingThenReturnBadRequest(){
+    @Transactional
+    public void givenThatGoogleJwtIsNotValidWhenAuthenticatingThenReturnBadRequest() throws Exception {
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         GoogleAuthenticationCredentials credentials = GoogleAuthenticationCredentials.builder()
                 .email(registeredMerchant.getEmail())

@@ -1,23 +1,28 @@
 package com.tongue.merchantservice.unit;
 
+import com.tongue.merchantservice.auth.dto.AuthenticationCredentials;
 import com.tongue.merchantservice.auth.dto.MerchantRegistrationForm;
+import com.tongue.merchantservice.core.exceptions.NoSuchEmailRegisteredException;
+import com.tongue.merchantservice.core.exceptions.WrongPasswordException;
 import com.tongue.merchantservice.domain.Merchant;
 import com.tongue.merchantservice.repositories.MerchantRepository;
+import com.tongue.merchantservice.services.MerchantAuthenticationService;
 import com.tongue.merchantservice.services.MerchantManagementService;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MerchantAuthenticationServiceTest {
-
-    @Autowired
-    MerchantRepository merchantRepository;
 
     @Autowired
     MerchantManagementService managementService;
@@ -26,11 +31,11 @@ public class MerchantAuthenticationServiceTest {
     MerchantAuthenticationService authenticationService;
 
     Merchant registeredMerchant;
+    MerchantRegistrationForm registrationFormAlex;
 
-    @Before
-    public void setUp(){
+    public MerchantAuthenticationServiceTest(){
 
-        MerchantRegistrationForm registrationFormAlex = MerchantRegistrationForm
+        registrationFormAlex = MerchantRegistrationForm
                 .builder()
                 .name("Alexander")
                 .storeName("Kfc")
@@ -43,12 +48,13 @@ public class MerchantAuthenticationServiceTest {
                 .ruc("1762416778003")
                 .build();
 
-        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
-
     }
 
     @Test
+    @Transactional
     public void shouldCreateGenerateAJwtGivenThatAuthenticationCredentialsAreOk(){
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         AuthenticationCredentials credentials = AuthenticationCredentials.builder()
                 .email(registeredMerchant.getEmail())
@@ -64,7 +70,10 @@ public class MerchantAuthenticationServiceTest {
     }
 
     @Test
+    @Transactional
     public void shouldReturnMalformedJwtExceptionWhenJwtIsWrong(){
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         Boolean exceptionCaught = false;
 
@@ -81,7 +90,11 @@ public class MerchantAuthenticationServiceTest {
 
     }
 
-    @Test void shouldReturnNoSuchEmailRegisteredExceptionWhenAuthenticationEmailDoesntExists(){
+    @Test
+    @Transactional
+    public void shouldReturnNoSuchEmailRegisteredExceptionWhenAuthenticationEmailDoesntExists(){
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         Boolean exceptionCaught = false;
 
@@ -101,7 +114,10 @@ public class MerchantAuthenticationServiceTest {
     }
 
     @Test
+    @Transactional
     public void shouldThrowWrongPasswordExceptionWhenAuthenticationPasswordIsWrong(){
+
+        registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
         Boolean exceptionCaught = false;
 
