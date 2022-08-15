@@ -1,6 +1,7 @@
 package com.tongue.merchantservice.acceptance;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tongue.merchantservice.auth.dto.AuthenticationCredentials;
@@ -10,10 +11,12 @@ import com.tongue.merchantservice.domain.Category;
 import com.tongue.merchantservice.domain.Merchant;
 import com.tongue.merchantservice.domain.Store;
 import com.tongue.merchantservice.services.MerchantManagementService;
+import com.tongue.merchantservice.services.StoreManagementService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,23 +85,26 @@ public class CreateNewCategoryTest {
     public void givenThatIHaveARestaurantWhenCreatingANewCategoryThenItMustBeSavedSuccessfully() throws Exception {
 
         registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
+        Store store = storeManagementService.getStoreByMerchantId(registeredMerchant.getId().toString());
 
         Category category0 = Category.builder()
                 .name("Carnes")
                 .description("Carnes a la brasa exclusiva para ti")
                 .categoryImageUrl("https://freeimages.com/3")
+                .store(store)
                 .build();
 
         Category category1 = Category.builder()
                 .name("Pizzas")
                 .description("Pizzas a la brasa exclusiva para ti")
                 .categoryImageUrl("https://freeimages.com/2")
+                .store(store)
                 .build();
 
-        Store store = storeManagementService.getStoreByMerchant(registeredMerchant);
 
-        category0 = storeManagementService.createNewCategory(category0);
-        category1 = storeManagementService.createNewCategory(category1);
+
+        storeManagementService.createNewCategory(category0);
+        storeManagementService.createNewCategory(category1);
 
         String storeId = store.getId().toString();
 
@@ -107,14 +114,19 @@ public class CreateNewCategoryTest {
                 .categoryImageUrl("https://freeimages.com/1")
                 .build();
 
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn(registeredMerchant.getId().toString());
+
         MvcResult postResult = this.mvc.perform(post("/stores/"+storeId+"/categories")
+                        .principal(mockPrincipal)
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(category2)))
                 .andReturn();
 
         String json = postResult.getResponse().getContentAsString();
         ApiResponse<Category> apiResponse = gson.fromJson(json,ApiResponse.class);
-        Category persistedCategory = apiResponse.getSuccess().getPayload();
+        String payloadJson = mapper.writeValueAsString(apiResponse.getSuccess().getPayload());
+        Category persistedCategory = gson.fromJson(payloadJson,Category.class);
 
         MvcResult getResult = this.mvc.perform(get("/stores/"+storeId+"/categories")
                         .contentType("application/json"))
@@ -122,7 +134,8 @@ public class CreateNewCategoryTest {
 
         String json2 = getResult.getResponse().getContentAsString();
         ApiResponse<List<Category>> apiResponse1 = gson.fromJson(json2,ApiResponse.class);
-        List<Category> existingCategories = apiResponse1.getSuccess().getPayload();
+        String payloadJson2 = mapper.writeValueAsString(apiResponse1.getSuccess().getPayload());
+        List<Category> existingCategories = mapper.readValue(payloadJson2,new TypeReference<>(){});
 
         existingCategories = existingCategories
                 .stream()
@@ -139,20 +152,27 @@ public class CreateNewCategoryTest {
 
         registeredMerchant = managementService.createNewMerchantEnvironment(registrationFormAlex);
 
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn(registeredMerchant.getId().toString());
+
         Category category0 = Category.builder()
                 .name("Carnes")
                 .description("Carnes a la brasa exclusiva para ti")
                 .categoryImageUrl("https://freeimages.com/3")
                 .build();
 
-        Store store = storeManagementService.getStoreByMerchant(registeredMerchant);
+        Store store = storeManagementService.getStoreByMerchantId(registeredMerchant.getId().toString());
+        category0.setStore(store);
+        storeManagementService.createNewCategory(category0);
 
         String storeId = store.getId().toString();
 
         MvcResult postResult = this.mvc.perform(post("/stores/"+storeId+"/categories")
+                        .principal(mockPrincipal)
                         .contentType("application/json")
                         .content(mapper.writeValueAsString(category0)))
                 .andReturn();
+
 
         assert postResult.getResponse().getStatus() == HttpServletResponse.SC_BAD_REQUEST;
 

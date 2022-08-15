@@ -26,7 +26,7 @@ public class Category {
 
     private String name;
     private String description;
-    private Instant createdAt;
+    private String createdAt;
     private String categoryImageUrl;
 
 }

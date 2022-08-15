@@ -77,7 +77,7 @@ public class MerchantManagementService {
                 .merchant(merchant)
                 .name(form.getStoreName())
                 .ruc(form.getRuc())
-                .createdAt(Instant.now())
+                .createdAt(Instant.now().toString())
                 .build();
 
         store = storeRepository.save(store);

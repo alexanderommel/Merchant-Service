@@ -9,4 +9,6 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
 
     Optional<Store> findByRuc(String ruc);
     Optional<Store> findByName(String name);
+
+    Optional<Store> findByMerchantId(Long id);
 }

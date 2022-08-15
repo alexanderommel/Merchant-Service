@@ -21,7 +21,7 @@ public class Store {
     @OneToOne(optional = false)
     private Merchant merchant;
 
-    private Instant createdAt;
+    private String createdAt;
     private String name;
     private String ruc;
 
