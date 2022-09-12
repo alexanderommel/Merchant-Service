@@ -31,13 +31,18 @@ public class AuthController {
 
     @PostMapping("/auth/register")
     public ApiResponse registerMerchant(@RequestBody MerchantRegistrationForm form){
+        log.info("Creating new Merchant account...");
+        log.info("Payload: "+form.toString());
         merchantManagementService.createNewMerchantEnvironment(form);
         return ApiResponse.success("Merchant registered successfully");
     }
 
     @PostMapping("/auth/login")
     public ApiResponse login(@RequestBody AuthenticationCredentials authenticationCredentials){
+        log.info("Authenticating user...");
+        log.info("Payload: "+authenticationCredentials.toString());
         String jwt = authenticationService.authenticateAndReturnJwt(authenticationCredentials);
+        log.info("Jwt generated: "+jwt);
         return ApiResponse.success(jwt);
     }
 
