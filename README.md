@@ -14,4 +14,4 @@ por lo que en base a la historias de usuario y criterios de aceptación definido
 
 ## FrontEnd
 
-Se utilizó React para crear el frontend de este servicio web.
+Se utilizó React para crear el frontend de este servicio web: https://github.com/alexanderommel/MerchantAdmin
