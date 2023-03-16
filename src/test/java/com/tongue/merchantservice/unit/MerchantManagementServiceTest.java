@@ -128,9 +128,9 @@ public class MerchantManagementServiceTest {
 
         MerchantRegistrationForm registrationForm2 = MerchantRegistrationForm
                 .builder()
-                .name("Alexander")
+                .name("Ale")
                 .storeName("Pizza Luna")
-                .email("alexanderommelsw@gmail.com")
+                .email("ale@gmail.com")
                 .phoneNumber("0911133444")
                 .address("Quito CCI2")
                 .latitude("1.01111")
@@ -163,9 +163,9 @@ public class MerchantManagementServiceTest {
 
         MerchantRegistrationForm registrationForm1 = MerchantRegistrationForm
                 .builder()
-                .name("Alexander1")
+                .name("Ale1")
                 .storeName("Pavos al horno")
-                .email("alexanderommelsw1@gmail.com")
+                .email("ale1@gmail.com")
                 .phoneNumber("0911133444")
                 .address("Quito CCI2")
                 .latitude("1.01111")
@@ -176,9 +176,9 @@ public class MerchantManagementServiceTest {
 
         MerchantRegistrationForm registrationForm2 = MerchantRegistrationForm
                 .builder()
-                .name("Alexander2")
+                .name("dos")
                 .storeName("Pavos al horno")
-                .email("alexanderommelsw2@gmail.com")
+                .email("ale2@gmail.com")
                 .phoneNumber("0911133444")
                 .address("Quito CCI2")
                 .latitude("1.01111")
@@ -223,9 +223,9 @@ public class MerchantManagementServiceTest {
 
         MerchantRegistrationForm registrationForm2 = MerchantRegistrationForm
                 .builder()
-                .name("Alexander2")
+                .name("Alex")
                 .storeName("Pavos a la brasa")
-                .email("alexanderommelsw2@gmail.com")
+                .email("alex123@gmail.com")
                 .phoneNumber("0911133444")
                 .address("Quito CCI2")
                 .latitude("1.01111")
