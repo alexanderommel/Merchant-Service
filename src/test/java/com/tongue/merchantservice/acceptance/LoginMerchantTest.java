@@ -61,9 +61,9 @@ public class LoginMerchantTest {
 
         registrationFormAlex = MerchantRegistrationForm
                 .builder()
-                .name("Alexander")
+                .name("Alejandro")
                 .storeName("Kfc")
-                .email("alexanderommelsw@gmail.com")
+                .email("alejandro@gmail.com")
                 .phoneNumber("0979533444")
                 .address("Quito CCI")
                 .latitude("1.01111")
