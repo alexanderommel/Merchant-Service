@@ -81,7 +81,7 @@ public class RegisterMerchantTest {
                 .builder()
                 .name("Alex")
                 .storeName("Kfc")
-                .email("alexanderommelsw@gmail.com")
+                .email("alex123@gmail.com")
                 .phoneNumber("0979533444")
                 .address("Quito CCI")
                 .latitude("1.01111")
