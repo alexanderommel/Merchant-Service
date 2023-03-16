@@ -39,7 +39,7 @@ public class MerchantAuthenticationServiceTest {
                 .builder()
                 .name("Alexander")
                 .storeName("Kfc")
-                .email("alexanderommelsw@gmail.com")
+                .email("alexanderrrr@gmail.com")
                 .phoneNumber("0979533444")
                 .address("Quito CCI")
                 .latitude("1.01111")
@@ -99,7 +99,7 @@ public class MerchantAuthenticationServiceTest {
         Boolean exceptionCaught = false;
 
         AuthenticationCredentials credentials = AuthenticationCredentials.builder()
-                .email("doesnt_exists@gmail.com")
+                .email("mal@gmail.com")
                 .password(registeredMerchant.getPassword())
                 .build();
 
